@@ -1,0 +1,144 @@
+.MODEL SMALL
+.STACK 100H
+.DATA
+
+   MSG1 DB 'Enter Length Of The Stick Between 4  and 9 meters: $'
+   MSG2 DB 'Enter Length Of The First Part : $'
+   MSG3 DB 'Enter Length Of The Second Part : $'
+   
+   MSG4 DB 'Length Of The Last Part = $'
+   MSG5 DB ' meter(s) $'  
+   
+   TOTAL DB ?
+   LENGTH DB ?
+   LENGTH2 DB ?
+   
+   NEWL EQU 0AH
+   CRET EQU 0DH 
+   
+
+.CODE
+
+ MAIN PROC
+    
+    MOV AX,@DATA
+    MOV DS,AX
+    
+    
+    LEA DX,MSG1
+    MOV AH,9
+    INT 21H 
+    
+    ;INPUT:
+    
+    MOV AH,1
+    INT 21H
+    MOV TOTAL,AL
+    
+    MOV BH,TOTAL
+    
+    MOV AH,2
+    MOV DL,CRET
+    INT 21H
+    MOV DL,NEWL
+    INT 21H 
+    
+    
+    LEA DX,MSG2
+    MOV AH,9
+    INT 21H
+      
+    MOV AH,1
+    INT 21H
+    MOV LENGTH,AL
+    
+        
+    MOV AH,2
+    MOV DL,CRET
+    INT 21H
+    MOV DL,NEWL
+    INT 21H 
+    
+      
+    LEA DX,MSG3
+    MOV AH,9
+    INT 21H 
+    
+    MOV AH,1
+    INT 21H
+    MOV LENGTH2,AL  
+    
+    
+    ;CALCULATION
+    MOV BL,LENGTH2
+    ADD BL,LENGTH
+    SUB BL,48   
+    
+ 
+    SUB TOTAL,BL   
+    ADD TOTAL,48   
+    
+    MOV AH,2
+    MOV DL,CRET
+    INT 21H
+    MOV DL,NEWL
+    INT 21H 
+    
+    ;OUTPUT
+    
+    LEA DX,MSG4
+    MOV AH,9
+    INT 21H 
+    
+    MOV AH,2
+    MOV DL,BH
+    INT 21H 
+    
+    MOV AH,2
+    MOV DL,'-'
+    INT 21H 
+    
+    MOV AH,2
+    MOV DL,'('
+    INT 21H  
+    
+    MOV AH,2
+    MOV DL,LENGTH
+    INT 21H 
+    
+    MOV AH,2
+    MOV DL,'+'
+    INT 21H 
+    
+    MOV AH,2
+    MOV DL,LENGTH2
+    INT 21H 
+     
+    MOV AH,2
+    MOV DL,')'
+    INT 21H 
+    
+    MOV AH,2
+    MOV DL,'='
+    INT 21H  
+    
+    MOV AH,2
+    MOV DL,' '
+    INT 21H
+    
+    MOV AH,2
+    MOV DL,TOTAL
+    INT 21H    
+     
+    
+    LEA DX,MSG5
+    MOV AH,9
+    INT 21H 
+    
+    MOV AH,4CH
+    INT 21H
+      
+ 
+ MAIN ENDP
+ 
+ END MAIN
