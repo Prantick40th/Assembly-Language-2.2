@@ -1,0 +1,121 @@
+.MODEL SMALL
+.STACK 100H
+.DATA  
+
+INPUT1 DB "ENTER X : $"
+INPUT2 DB "ENTER Y : $"
+PRINT DB "SOLUTION : $" 
+EXCHANGE DB "EXCHANGED VALUE : $"
+
+X DB ?
+Y DB ?  
+Z EQU 3 
+
+_MUL DB 0
+
+.CODE
+    MAIN PROC
+        
+        ;MEMORY ALLOCATION
+        MOV AX,@DATA
+        MOV DS,AX
+        
+        ;TAKING INPUT 1
+        LEA DX,INPUT1
+        MOV AH,9
+        INT 21H
+        
+        MOV AH,1
+        INT 21H
+        MOV X,AL
+        
+        MOV AH,2
+        MOV DL,0AH
+        INT 21H
+        MOV DL,0DH
+        INT 21H
+        
+        ;TAKING INPUT 2
+        LEA DX,INPUT2
+        MOV AH,9
+        INT 21H
+        
+        MOV AH,1
+        INT 21H
+        MOV Y,AL
+        
+        MOV AH,2
+        MOV DL,0AH
+        INT 21H
+        MOV DL,0DH
+        INT 21H
+        
+        ;SOLUTION
+        LEA DX,PRINT
+        MOV AH,9
+        INT 21H
+           
+        
+        MOV AL,3
+        MOV BL,Y
+        MUL BL 
+        SUB AL,96 
+        MOV _MUL,AL
+        
+        MOV BL,5
+        SUB BL,X
+        ADD BL,96
+        
+        ADD BL,_MUL
+        SUB BL,48
+        
+        SUB BL,Z 
+        
+        
+        
+        MOV AH,2
+        MOV DL,BL
+        INT 21H
+        
+        
+        ;EXCHANGE
+        MOV CL,X
+        MOV CH,Y
+        
+        MOV AH,2
+        MOV DL,0AH
+        INT 21H
+        MOV DL,0DH
+        INT 21H
+        
+        LEA DX,EXCHANGE
+        MOV AH,9
+        INT 21H
+        
+        MOV AH,2
+        MOV DL,0AH
+        INT 21H
+        MOV DL,0DH
+        INT 21H
+        
+        XCHG CL,CH
+        
+        MOV AH,2
+        MOV DL,CL
+        INT 21H 
+        
+        MOV AH,2
+        MOV DL,0AH
+        INT 21H
+        MOV DL,0DH
+        INT 21H
+        
+        MOV AH,2
+        MOV DL,CH
+        INT 21H
+       
+    
+        MOV AH,4CH
+        INT 21H
+        MAIN ENDP
+    END MAIN
